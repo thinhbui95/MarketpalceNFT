@@ -185,7 +185,7 @@ pub mod vd1 {
             1,
             &ctx.accounts.token_account_nft_user.to_account_info(),
             &ctx.accounts.token_account_nft_pool.to_account_info(),
-            &ctx.accounts.user.to_account_info(),
+            &ctx.accounts.owner.to_account_info(),
             &[],
         ).expect("transfer fail");
         Ok(())
@@ -245,6 +245,9 @@ pub mod vd1 {
 }
 
 
+
+
+
 #[account]
 #[derive( Default)]
 pub struct Market {
@@ -299,8 +302,9 @@ pub struct ListNFT<'info> {
     mint_nft_pool: Account<'info, Mint>,
     #[account(
         mut,
-        has_one = mint_nft_pool.key()  ,
-        has_one = token_fee.key() ,
+        has_one = mint_nft_pool.key() ,
+        has_one = token_fee.key(),
+        has_one = owner.key(),
     )]
     market: Account<'info, Market>,
     #[account(mut)]
@@ -316,15 +320,15 @@ pub struct ListNFT<'info> {
 
     #[account(
         mut,
-        constraint=token_account_nft_user.owner == user.key() ,
+        constraint=token_account_nft_user.owner == owner.key() ,
         constraint=token_account_nft_user.mint == mint_nft_pool.key(),
     )]
     token_account_nft_user: Account<'info, TokenAccount>,
     #[account(mut)]
-    user: Signer<'info>,
+    owner: Signer<'info>,
     #[account(
         init,
-        payer = user,
+        payer = owner,
         space = 8 + 8,
     )]
     price_nft: Account<'info, PriceNft>,
@@ -342,6 +346,7 @@ pub struct RemoveNFT<'info> {
         mut,
         has_one = mint_nft_pool.key()  ,
         has_one = token_fee.key() ,
+        has_one = owner.key()
     )]
     market: Account<'info, Market>,
     #[account(mut)]
@@ -357,12 +362,12 @@ pub struct RemoveNFT<'info> {
 
     #[account(
         mut,
-        constraint=token_account_nft_user.owner == user.key() ,
+        constraint=token_account_nft_user.owner == owner.key() ,
         constraint=token_account_nft_user.mint == mint_nft_pool.key(),
     )]
     token_account_nft_user: Account<'info, TokenAccount>,
     #[account(mut)]
-    user: Signer<'info>,
+    owner: Signer<'info>,
     #[account(mut)]
     price_nft: Account<'info, PriceNft>,
     system_program: Program<'info, System>,

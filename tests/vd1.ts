@@ -241,7 +241,7 @@ describe('implement' ,() => {
     //         tokenFee:mint_price,
     //         tokenAccountNftPool:pda_token_account_nft,
     //         tokenAccountNftUser: tokenAccount_nft,
-    //         user: wallet.publicKey,
+    //         owner: wallet.publicKey,
     //         priceNft: price_nft.publicKey,
     //         systemProgram: SystemProgram.programId,
     //         tokenProgram: TOKEN_PROGRAM_ID
@@ -299,7 +299,7 @@ describe('implement' ,() => {
             tokenFee:mint_price,
             tokenAccountNftPool:pda_token_account_nft,
             tokenAccountNftUser: tokenAccount_nft,
-            user: wallet.publicKey,
+            owner: wallet.publicKey,
             priceNft: price_nft,
             systemProgram: SystemProgram.programId,
             tokenProgram: TOKEN_PROGRAM_ID
